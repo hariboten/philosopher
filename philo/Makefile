@@ -6,7 +6,7 @@
 #    By: ewatanab <ewatanab@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/07 14:55:05 by ewatanab          #+#    #+#              #
-#    Updated: 2021/07/07 15:04:10 by ewatanab         ###   ########.fr        #
+#    Updated: 2021/07/07 15:33:07 by ewatanab         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,25 +25,24 @@ OBJDIR = ./obj/
 OBJS = $(SRCNAMES:%.c=$(OBJDIR)%.o)
 
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g -O0
 
-all : $(objdir) $(name)
+all : $(OBJDIR) $(NAME)
 
-$(objdir) :
-	mkdir -p obj
+$(OBJDIR) :
+	mkdir -p $@
 
-$(objdir)%.o : $(srcdir)%.c
-	$(cc) $(cflags) -c -o $@ $<
+$(OBJDIR)%.o : $(SRCDIR)%.c
+	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(name) : $(objs)
-	make -c $(libdir)
-	$(cc) $(cflags) -o $@ $^ -pthreads
+$(NAME) : $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ -pthread
 
 clean :
-	rm -f $(objs)
+	rm -f $(OBJS)
 
 fclean : clean
-	rm -f $(name)
+	rm -f $(NAME)
 
 re : fclean all
 

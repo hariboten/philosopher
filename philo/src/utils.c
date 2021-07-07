@@ -6,7 +6,7 @@
 /*   By: ewatanab <ewatanab@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 13:41:08 by ewatanab          #+#    #+#             */
-/*   Updated: 2021/07/07 14:34:28 by ewatanab         ###   ########.fr       */
+/*   Updated: 2021/07/07 15:38:24 by ewatanab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,11 @@ bool	is_numeric(const char *str)
 	if (*str == '-')
 		str++;
 	while  (*str)
+	{
 		if (*str < '0' || *str > '9')
 			return (false);
+		str++;
+	}
 	return (true);
 }
 
