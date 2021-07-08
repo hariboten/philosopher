@@ -6,7 +6,7 @@
 /*   By: ewatanab <ewatanab@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 14:04:05 by ewatanab          #+#    #+#             */
-/*   Updated: 2021/07/07 14:54:17 by ewatanab         ###   ########.fr       */
+/*   Updated: 2021/07/07 18:15:31 by ewatanab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,10 @@ static void				*philos_thread(void *arg)
 		if (id % 2)
 			act_take_a_fork(dpp, id, rightside_fork(dpp, id));
 		act_take_a_fork(dpp, id, leftside_fork(dpp, id));
-		if (!id % 2)
+		if (!(id % 2))
 			act_take_a_fork(dpp, id, rightside_fork(dpp, id));
 		act_eat(dpp, id);
-		philosopher->ate_counter++;
-		if (dpp->fin_flag)
-			break ;
 		act_sleep(dpp, id);
-		if (dpp->fin_flag)
-			break ;
 		act_think(dpp, id);
 	}
 	return (NULL);
@@ -59,8 +54,8 @@ void					dining_philos_prob(t_dpp *dpp)
 	if (!(threads = malloc(dpp->number_of_philosophers * sizeof(pthread_t))))
 		return ;
 	err_flag = 0;
-	i = 0;
-	while (i < dpp->number_of_philosophers)
+	i = -1;
+	while (++i < dpp->number_of_philosophers)
 		err_flag |= pthread_create(&threads[i], NULL, philos_thread, init_philosopher(&dpp->philosophers[i], dpp, i));
 	if (!err_flag)
 		err_flag |= pthread_create(&observer, NULL, observer_thread, dpp);
@@ -68,7 +63,7 @@ void					dining_philos_prob(t_dpp *dpp)
 		err_flag |= pthread_join(observer, NULL);
 	i = 0;
 	while (i < dpp->number_of_philosophers)
-		pthread_detach(threads[i]);
+		pthread_detach(threads[i++]);
 	free(threads);
 	if (err_flag)
 		ft_putstr_fd("philo: failed to create thread\n", 2);

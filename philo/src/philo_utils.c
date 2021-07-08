@@ -6,7 +6,7 @@
 /*   By: ewatanab <ewatanab@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/07 14:38:23 by ewatanab          #+#    #+#             */
-/*   Updated: 2021/07/07 15:18:18 by ewatanab         ###   ########.fr       */
+/*   Updated: 2021/07/07 17:56:31 by ewatanab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,8 @@
 long	get_timestamp()
 {
 	struct timeval tp;
-	struct timezone tzp;
 
-	if (gettimeofday(&tp, &tzp))
+	if (gettimeofday(&tp, NULL))
 		return (-1);
 	return (tp.tv_sec * 1000 + tp.tv_usec / 1000);
 }

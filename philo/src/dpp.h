@@ -6,7 +6,7 @@
 /*   By: ewatanab <ewatanab@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 12:26:42 by ewatanab          #+#    #+#             */
-/*   Updated: 2021/07/07 14:41:45 by ewatanab         ###   ########.fr       */
+/*   Updated: 2021/07/07 18:16:57 by ewatanab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <stdbool.h>
 # include <pthread.h>
 # include <sys/time.h>
+
+# define U2M 1000L
 
 enum	e_init_errno
 {
@@ -34,21 +36,22 @@ typedef struct s_philosopher t_philosopher;
 typedef struct s_dpp
 {
 	int				number_of_philosophers;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
+	long long			time_to_die;
+	long long			time_to_eat;
+	long long			time_to_sleep;
 	int				number_of_times_each_philosopher_must_eat;
 	bool			fin_flag;
 	t_philosopher	*philosophers;
 	pthread_mutex_t *forks;
+	pthread_mutex_t output_mutex;
 } t_dpp;
 
 struct s_philosopher
 {
-	t_dpp	*dpp;
-	int		id;
-	int		ate_counter;
-	long	last_ate;
+	t_dpp		*dpp;
+	int			id;
+	int			ate_counter;
+	long long	last_ate;
 };
 
 /*

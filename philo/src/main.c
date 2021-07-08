@@ -6,7 +6,7 @@
 /*   By: ewatanab <ewatanab@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 12:42:16 by ewatanab          #+#    #+#             */
-/*   Updated: 2021/07/07 14:29:29 by ewatanab         ###   ########.fr       */
+/*   Updated: 2021/07/07 17:06:16 by ewatanab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int		main(int argc, char **argv)
 {
 	t_dpp dpp;
 
-	if (!dpp_init(&dpp, argc, argv))
+	if (dpp_init(&dpp, argc, argv))
 		return (-1);
 	dining_philos_prob(&dpp);
 	dpp_destroy(&dpp);

@@ -6,7 +6,7 @@
 /*   By: ewatanab <ewatanab@student.42tokyo.jp      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/07 13:55:49 by ewatanab          #+#    #+#             */
-/*   Updated: 2021/07/07 14:33:32 by ewatanab         ###   ########.fr       */
+/*   Updated: 2021/07/07 17:43:11 by ewatanab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ static int	parse_arg(t_dpp *dpp, int argc, char **argv)
 		if (!is_numeric(argv[i++]))
 			return (init_err(EINVARG));
 	dpp->number_of_philosophers = ft_atoi(argv[1]);
-	dpp->time_to_die = ft_atoi(argv[2]);
-	dpp->time_to_eat = ft_atoi(argv[3]);
-	dpp->time_to_sleep = ft_atoi(argv[4]);
+	dpp->time_to_die = ft_atoi(argv[2]) * U2M;
+	dpp->time_to_eat = ft_atoi(argv[3]) * U2M;
+	dpp->time_to_sleep = ft_atoi(argv[4]) * U2M;
 	if (argc == 6)
 		dpp->number_of_times_each_philosopher_must_eat = ft_atoi(argv[5]);
 	else
@@ -61,12 +61,14 @@ int			dpp_init(t_dpp *dpp, int argc, char **argv)
 {
 	int		i;
 
-	if (!parse_arg(dpp, argc, argv))
+	if (parse_arg(dpp, argc, argv))
 		return (-1);
 	dpp->fin_flag = false;
-	if (!(dpp->philosophers = malloc(dpp->number_of_philosophers * sizeof(t_philosopher))))
+	dpp->philosophers = malloc(dpp->number_of_philosophers * sizeof(t_philosopher));
+	if (!dpp->philosophers)
 		return (init_err(EALLOC));
-	if (!(dpp->forks = malloc(dpp->number_of_philosophers * sizeof(pthread_mutex_t))))
+	dpp->forks = malloc(dpp->number_of_philosophers * sizeof(pthread_mutex_t));
+	if (!dpp->forks)
 	{
 		free(dpp->philosophers);
 		return (init_err(EALLOC));
@@ -74,13 +76,9 @@ int			dpp_init(t_dpp *dpp, int argc, char **argv)
 	i = 0;
 	while (i < dpp->number_of_philosophers)
 		if (pthread_mutex_init(&dpp->forks[i++], NULL))
-		{
-			while (--i >= 0)
-				pthread_mutex_destroy(&dpp->forks[i]);
-			free(dpp->philosophers);
-			free(dpp->forks);
 			return (init_err(EMUTINIT));
-		}
+	if (pthread_mutex_init(&dpp->output_mutex, NULL))
+			return (init_err(EMUTINIT));
 	return (0);
 }
 
@@ -91,5 +89,6 @@ void		dpp_destroy(t_dpp *dpp)
 	free(dpp->philosophers);
 	i = 0;
 	while (i < dpp->number_of_philosophers)
-		pthread_mutex_destroy(&dpp->forks[i]);
+		pthread_mutex_destroy(&dpp->forks[i++]);
+	pthread_mutex_destroy(&dpp->output_mutex);
 }
